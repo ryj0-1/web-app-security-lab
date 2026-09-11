@@ -1,4 +1,14 @@
-# web-app-security-lab
+# 🛡️ AppSec Lab | Vulnerable & Hardened Web Infrastructure
+
+<p align="left">
+  <img src="https://img.shields.io/badge/UBUNTU-E95420?style=for-the-badge&logo=ubuntu&logoColor=white" alt="Ubuntu" />
+  <img src="https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white" alt="Nginx" />
+  <img src="https://img.shields.io/badge/PYTHON-3.12-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python" />
+  <img src="https://img.shields.io/badge/FLASK-3.0-000000?style=for-the-badge&logo=flask&logoColor=white" alt="Flask" />
+  <img src="https://img.shields.io/badge/SQLITE-003B57?style=for-the-badge&logo=sqlite&logoColor=white" alt="SQLite" />
+  <img src="https://img.shields.io/badge/OWASP-TOP_10-4B0082?style=for-the-badge" alt="OWASP" />
+</p>
+
 Vulnerable & hardened web application lab (Ubuntu, Nginx, Flask, SQLite) demonstrating OWASP Top 10 (SQLi, Stored XSS, Command Injection) exploitation and remediation.
 
 # Secure Full-Stack Web Application Lab (AppSec / OWASP Top 10)
