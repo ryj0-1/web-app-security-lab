@@ -1,2 +1,3 @@
 # web-app-security-lab
-Full-stack lab environment (Nginx/Flask/SQLite) demonstrating OWASP Top 10 web vulnerability exploitation (SQLi, Stored XSS, Comand Injection) and practical remediation.
+Vulnerable & hardened web application lab (Ubuntu, Nginx, Flask, SQLite) demonstrating OWASP Top 10 (SQLi, Stored XSS, Command Injection) exploitation and remediation.
+
