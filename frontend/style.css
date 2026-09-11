@@ -1,1 +1,139 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
 
+body {
+    background-color: #0f172a;
+    color: #f8fafc;
+    display: flex;
+    justify-content: center;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+.container {
+    width: 100%;
+    max-width: 650px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #38bdf8;
+}
+
+header p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin-top: 5px;
+}
+
+.card {
+    background-color: #1e293b;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    margin-bottom: 25px;
+    border: 1px solid #334155;
+}
+
+.card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+    color: #f1f5f9;
+    border-bottom: 1px solid #334155;
+    padding-bottom: 8px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.9rem;
+    color: #cbd5e1;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    color: #f8fafc;
+    font-size: 0.95rem;
+    outline: none;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+    border-color: #38bdf8;
+}
+
+button {
+    width: 100%;
+    background-color: #0284c7;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0369a1;
+}
+
+.empty-msg {
+    color: #64748b;
+    font-style: italic;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.post-item {
+    background-color: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    padding: 12px 15px;
+    margin-bottom: 12px;
+}
+
+.post-author {
+    font-weight: bold;
+    color: #38bdf8;
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.post-text {
+    color: #e2e8f0;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+#pingOutput {
+    background: #020617;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #38bdf8;
+    min-height: 40px;
+    display: none;
+    white-space: pre-wrap;
+    word-break: break-all;
+}
