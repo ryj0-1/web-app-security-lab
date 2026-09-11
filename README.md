@@ -24,7 +24,7 @@ This environment demonstrates end-to-end security engineering across all layers 
 2. **Prepared Statement SQL Compiling:** Eliminates classic **SQL Injection (SQLi)** by replacing arbitrary dynamic query string formatting with pre-compiled parameterized statement tuples (`?` placeholders) executed via native `sqlite3` drivers.
 3. **DOM-Context Text Sanitization:** Replaces insecure `innerHTML` node parsing with strict `.textContent` evaluation, completely mitigating **Stored Cross-Site Scripting (XSS)** vectors at the browser rendering boundary.
 4. **Subprocess Shell Decoupling:** Replaces risky `/bin/sh` process dispatching (`shell=True`) with direct, non-interpolated execution arrays (`shell=False`), combined with regex-based strict input whitelisting to eliminate **Remote Command Execution (RCE)**.
-5. **Headless Systemd Sandboxing:** Runs Python application services in virtualized userland spaces (`python3-venv`), keeping the core operating system free of unvetted package dependencies.
+5. **Virtualized Userland Dependency Isolation:** Isolates Python application runtimes within a dedicated virtual environment (`python3-venv`). This strictly decouples project packages from core operating system libraries, preventing system-level dependency pollution.
 
 ---
 
