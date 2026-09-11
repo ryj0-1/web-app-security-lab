@@ -9,11 +9,10 @@
   <img src="https://img.shields.io/badge/OWASP-TOP_10-4B0082?style=for-the-badge" alt="OWASP" />
 </p>
 
-Vulnerable & hardened web application lab (Ubuntu, Nginx, Flask, SQLite) demonstrating OWASP Top 10 (SQLi, Stored XSS, Command Injection) exploitation and remediation.
+A full-stack, bare-metal-equivalent web application security research lab engineered on a virtualized **Ubuntu Linux** environment. This project demonstrates the lifecycle of modern web infrastructure: reverse proxy routing, asynchronous API bridging, and realistic **OWASP Top 10** vulnerability exploitation followed by defense-in-depth code remediation and kernel-level process isolation.
 
-# Secure Full-Stack Web Application Lab (AppSec / OWASP Top 10)
-
-A lab environment demonstrating the full lifecycle of a web application: from configuring virtual infrastructure (Linux / Nginx), through building the backend (Flask / SQLite) and frontend (Vanilla JS), to simulating OWASP Top 10 vulnerability exploits and their effective remediation (Hardening).
+> [!NOTE]
+> This laboratory is built for academic research and vulnerability demonstration. Ensure all testing is conducted inside isolated sandbox network adapters (Host-Only / NAT) to avoid accidental network exposure.
 
 ---
 
