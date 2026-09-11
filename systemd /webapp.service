@@ -1,0 +1,17 @@
+[Unit]
+Description=Secure Flask Web Application Daemon
+After=network.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/webapp
+ExecStart=/opt/webapp/venv/bin/python /opt/webapp/app.py
+Restart=always
+RestartSec=3
+
+# Basic systemd process sandboxing
+ProtectSystem=full
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
