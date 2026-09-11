@@ -132,5 +132,4 @@ python backend/app.py
 
 ## 📜 License
 
-This project is licensed under the **MIT License**. Created for security research, portfolio presentation, and vulnerability reproduction labs.
-
+This project is licensed under the **[MIT License] (https://github.com/ryj0-1/web-app-security-lab/blob/main/LICENSE)**. Created for security research, portfolio presentation, and vulnerability reproduction labs.
