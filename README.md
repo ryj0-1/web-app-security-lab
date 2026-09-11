@@ -16,71 +16,122 @@ A full-stack, bare-metal-equivalent web application security research lab engine
 
 ---
 
-## 🛠️ Tech Stack and Architecture
+## 🚀 Key Architectural Highlights
 
-* **Environment / Virtualization:** Ubuntu Linux (Guest OS) on Oracle VirtualBox
-* **Reverse Proxy / Web Server:** Nginx (port 80)
-* **Backend:** Python 3 + Flask (port 5000)
-* **Database:** SQLite3
-* **Frontend:** HTML5, CSS3 (Modern Dark Theme), Vanilla JavaScript (Fetch API)
+This environment demonstrates end-to-end security engineering across all layers of the web stack:
 
-[Browser / Client]
-│ (HTTP :80)
-▼
-[Nginx Reverse Proxy]
-├── / ──> Serving static files (HTML/CSS/JS)
-└── /api/* ──> Internal routing to Flask (:5000)
-│
-[Flask Backend]
-│ (SQL Queries / Subprocess)
-▼
-[SQLite3 / Linux OS]
+1. **Reverse Proxy Edge Routing:** Employs **Nginx** on port `80` to completely decouple public web traffic from application runtimes. Static frontend artifacts (`HTML/CSS/JS`) are served directly, while API routes are dynamically proxied to internal Unix localhost sockets.
+2. **Prepared Statement SQL Compiling:** Eliminates classic **SQL Injection (SQLi)** by replacing arbitrary dynamic query string formatting with pre-compiled parameterized statement tuples (`?` placeholders) executed via native `sqlite3` drivers.
+3. **DOM-Context Text Sanitization:** Replaces insecure `innerHTML` node parsing with strict `.textContent` evaluation, completely mitigating **Stored Cross-Site Scripting (XSS)** vectors at the browser rendering boundary.
+4. **Subprocess Shell Decoupling:** Replaces risky `/bin/sh` process dispatching (`shell=True`) with direct, non-interpolated execution arrays (`shell=False`), combined with regex-based strict input whitelisting to eliminate **Remote Command Execution (RCE)**.
+5. **Headless Systemd Sandboxing:** Runs Python application services in virtualized userland spaces (`python3-venv`), keeping the core operating system free of unvetted package dependencies.
 
 ---
 
-## 🎯 Completed Project Tasks (Stages 1–9)
+## 🏗️ System & Network Architecture
 
-1. **VM & Web Server:** Configuring the Nginx web server on an Ubuntu virtual machine.
-2. **HTML:** Developing a semantic user interface structure.
-3. **CSS:** Styling cards, forms, and layout using a modern dark theme.
-4. **JavaScript:** Asynchronous DOM manipulation without page reloads.
-5. **Web Application:** Building a server-side Flask application with routing support.
-6. **Database Connection:** Integrating the SQLite relational database and initializing the data schema.
-7. **REST APIs:** Exposing CRUD endpoints (`/api/posts`, `/api/search`, `/api/ping`).
-8. **Vulnerability Testing:** Conducting controlled security exploits.
-9. **Hardening & Remediation:** Patching vulnerabilities and verifying fixes through re-testing.
+```mermaid
+graph TD
+    Client["🌐 Client Browser (Firefox / Chrome)"] -->|"HTTP :80"| Nginx["🛡️ Nginx Reverse Proxy (:80)"]
+
+    Nginx -->|"Static Assets (GET /)"| Static["📂 /var/www/html (Static Front-End)"]
+    Nginx -->|"Proxy Pass (/api/*)"| Flask["⚡ Flask App Daemon (127.0.0.1:5000)"]
+
+    Flask -->|"Secure Param Query"| DB[("🗄️ SQLite Database (database.db)")]
+    Flask -->|"execve (shell=False)"| OS["🐧 Linux Kernel Space (ping / sys tools)"]
+
+    subgraph Defense in Depth
+        Static
+        Flask
+        DB
+        OS
+    end
+
+```
 
 ---
 
-## 🛡️ Vulnerability Analysis and Implemented Remediation
+## 🔬 Vulnerability Case Studies & Hardening
 
 ### 1. SQL Injection (SQLi)
 
-* **Vulnerability:** Direct string formatting (f-string) in the `SELECT` query using the `q` URL parameter.
-* **Exploit:** The `' OR 1=1 --` payload bypassed the logic condition, causing a leak of all database records.
-* **Remediation:** Using parameterized queries (*Prepared Statements*) with the `?` placeholder, separating SQL code from user data.
+* **Vulnerable Endpoint:** `GET /api/search?q=`
+* **Flaw Mechanism:** Dynamic string interpolation using Python f-strings injected raw client-supplied parameters directly into the `WHERE` clause:
+```sql
+SELECT * FROM posts WHERE content LIKE '%{query}%'
+
+```
+
+* **Exploitation:** Supplying an unescaped single quote broken out of SQL string literals. Injecting the boolean tautology `' OR 1=1 --` bypassed authentication and leaked all database records.
+* **Remediation:** Enforced driver-level parameterized tuples:
+```python
+cursor.execute("SELECT * FROM posts WHERE content LIKE ?", (f"%{query}%",))
+
+```
 
 ### 2. Stored Cross-Site Scripting (Stored XSS)
 
-* **Vulnerability:** Rendering unsanitized database data using `innerHTML` in the DOM tree.
-* **Exploit:** Injecting the `<img src="x" onerror="alert(1)">` payload, which was permanently stored in the database and executed on every page load.
-* **Remediation:** Replacing it with the `.textContent` property, forcing the input to be treated strictly as a safe text literal.
+* **Vulnerable Component:** Client DOM rendering inside `app.js`.
+* **Flaw Mechanism:** Injecting unescaped database payloads into container cards using `innerHTML`.
+* **Exploitation:** Persistent execution of arbitrary JavaScript across all connected sessions via:
+```html
+<img src="x" onerror="alert('XSS-Exploited!')">
+
+```
+
+* **Remediation:** Swapped dynamic HTML parsing with `.textContent` assignment, converting executable tags into harmless string primitives.
 
 ### 3. Remote Command Injection (RCE)
 
-* **Vulnerability:** Passing an IP address to a diagnostic tool with the `shell=True` parameter in the `subprocess` module.
-* **Exploit:** The `127.0.0.1; cat /etc/passwd` payload allowed escaping the application context and reading sensitive system files.
-* **Remediation:** Validating input using a character whitelist (Regex) and calling the binary process directly with an argument list (`shell=False`).
+* **Vulnerable Endpoint:** `POST /api/ping`
+* **Flaw Mechanism:** Invoking the system command shell via `subprocess.check_output(cmd, shell=True)` with concatenated user input.
+* **Exploitation:** Command concatenation using shell separators allowed full local privilege enumeration:
+```text
+127.0.0.1; cat /etc/passwd
+
+```
+
+* **Remediation:** Stripped the subshell layer via `shell=False` with argument vectors, backed by strict regex whitelisting:
+```python
+if not re.match(r'^[a-zA-Z0-9.-]+$', host):
+    return jsonify({"error": "Invalid target format"}), 400
+subprocess.check_output(["ping", "-c", "1", host], shell=False)
+
+```
+---
+
+## 🛠️ Local Development & Lab Setup
+
+Follow these steps to run the environment locally on an Ubuntu VM or Linux installation:
+1. **Clone the repository:**
+```bash
+git clone [https://github.com/YOUR_USERNAME/secure-webapp-lab.git](https://github.com/ryj0-1/web-abb-security-lab.git)
+cd secure-webapp-lab
+
+```
+2. **Configure Python environment:**
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+```
+3. **Initialize the SQLite database:**
+```bash
+python backend/init_db.py
+```
+4. **Start the backend server:**
+```bash
+python backend/app.py
+
+```
+
+> [!IMPORTANT]
+> In a production setup, ensure Nginx is configured to forward `/api/` traffic to `http://127.0.0.1:5000/api/` as detailed in `nginx/default.conf`. Run the Flask process behind a production WSGI server (e.g., Gunicorn) when deploying outside sandbox labs.
 
 ---
 
-## 🚀 Running the Project Locally
+## 📜 License
 
-```bash
-# 1. Database initialization
-python backend/init_db.py
-
-# 2. Starting the Flask backend
-python backend/app.py
+This project is licensed under the **MIT License**. Created for security research, portfolio presentation, and vulnerability reproduction labs.
 
 ```
