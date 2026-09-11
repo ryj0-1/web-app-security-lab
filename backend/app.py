@@ -27,7 +27,7 @@ def get_posts():
 def add_post():
     data = request.get_json()
     if not data or 'author' not in data or 'content' not in data:
-        return jsonify({"error": "Brakujące dane"}), 400
+        return jsonify({"error": "Missing data"}), 400
 
     author = data['author']
     content = data['content']
@@ -40,7 +40,7 @@ def add_post():
     )
     conn.commit()
     conn.close()
-    return jsonify({"message": "Wpis zapisany!"}), 201
+    return jsonify({"message": "Entry saved!"}), 201
 
 # API: Searching for entries (Hardering against SQLi INJECTION)
 @app.route('/api/search', methods=['GET'])
@@ -65,13 +65,13 @@ def ping_host():
     host = data.get('target', '').strip()
 
     if not host:
-        return jsonify({"error": "Brak celu do sprawdzenia"}), 400
+        return jsonify({"error": "No target to check"}), 400
 
 	# Whitelist input validation
     # Allow only letters, numbers, dots, and hyphens (standard domain/IP).
     # Reject separators: ;, &, |, `, $, spaces, etc.
     if not re.match(r'^[a-zA-Z0-9.-]+$', host):
-        return jsonify({"output": "Błąd: Niedozwolone znaki w adresie docelowym!"}), 400
+        return jsonify({"output": "Error: Invalid characters in the destination address!"}), 400
 
     # Executed directly without shell (shell=False)
     cmd = ["ping", "-c", "1", host]
