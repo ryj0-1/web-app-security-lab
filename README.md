@@ -105,7 +105,8 @@ subprocess.check_output(["ping", "-c", "1", host], shell=False)
 Follow these steps to run the environment locally on an Ubuntu VM or Linux installation:
 1. **Clone the repository:**
 ```bash
-git clone [https://github.com/YOUR_USERNAME/secure-webapp-lab.git](https://github.com/ryj0-1/web-abb-security-lab.git)
+git clone [https://github.com/ryj0-1/secure-webapp-lab.git] 
+(https://github.com/ryj0-1/web-abb-security-lab.git)
 cd secure-webapp-lab
 
 ```
