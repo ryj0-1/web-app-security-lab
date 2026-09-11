@@ -134,4 +134,3 @@ python backend/app.py
 
 This project is licensed under the **MIT License**. Created for security research, portfolio presentation, and vulnerability reproduction labs.
 
-```
